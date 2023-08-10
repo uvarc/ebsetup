@@ -83,40 +83,40 @@ if tc_comps is None:
 
 1. In `lib/pythonX.Y/site-packages/easybuild/tools/module_naming_scheme/toolchain.py`:
 
-```python
-from easybuild.tools.toolchain.container import CONTAINER_FAMILY
-...
-if ec.toolchain.is_system_toolchain() or ec.toolchain.name == 'apptainer':
-```
+    ```python
+    from easybuild.tools.toolchain.container import CONTAINER_FAMILY
+    ...
+    if ec.toolchain.is_system_toolchain() or ec.toolchain.name == 'apptainer':
+    ```
 
 1. In `lib/pythonX.Y/site-packages/easybuild/tools/module_naming_scheme/rivanna_hmns.py`:
+    
+    ```python
+    CONTAINER = 'container'
+    CONTAINER_TOOLCHAINS = ['apptainer']
+    MODULECLASS_CONTAINER = 'containersystem'
 
-```python
-CONTAINER = 'container'
-CONTAINER_TOOLCHAINS = ['apptainer']
-MODULECLASS_CONTAINER = 'containersystem'
-
-# Under det_module_subdir:
-        if tc_comps is None:
-            ...
-            elif ec.toolchain.TOOLCHAIN_FAMILY == 'CONTAINER':
-                subdir = os.path.join(CONTAINER, ec.toolchain.name, ec.toolchain.version)
-```
+    # Under det_module_subdir:
+            if tc_comps is None:
+                ...
+                elif ec.toolchain.TOOLCHAIN_FAMILY == 'CONTAINER':
+                    subdir = os.path.join(CONTAINER, ec.toolchain.name, ec.toolchain.version)
+    ```
 
 1. Copy `container.py` from this repo to `lib/pythonX.Y/site-packages/easybuild/tools/toolchain`. (If syntax has changed, start from `toolchains/compiler/dummy.py`.)
 
 1. Copy `apptainer.py` from this repo to `lib/pythonX.Y/site-packages/easybuild/toolchains`.
 
 1. In `lib/pythonX.Y/site-packages/easybuild/tools/toolchain/toolchain.py`:
+    
+    ```python
+    #                                   vvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+            if self.is_system_toolchain() or self.name == 'apptainer':
 
-```python
- #                                   vvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
-        if self.is_system_toolchain() or self.name == 'apptainer':
-
-            # define minimal build environment when using system toolchain;
-            # this is mostly done to try controlling which compiler commands are being used,
-            # cfr. https://github.com/easybuilders/easybuild-framework/issues/3398
-            self.set_minimal_build_env()
-```
+                # define minimal build environment when using system toolchain;
+                # this is mostly done to try controlling which compiler commands are being used,
+                # cfr. https://github.com/easybuilders/easybuild-framework/issues/3398
+                self.set_minimal_build_env()
+    ```
 
 1. Copy `apptainerimage.py` from this repo to `lib/pythonX.Y/site-packages/easybuild/easyblocks/a`. (If syntax has changed, compare with `lib/pythonX.Y/site-packages/easybuild/easyblocks/generic/binary.py`.)
