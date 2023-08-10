@@ -110,7 +110,9 @@ if tc_comps is None:
 1. In `lib/pythonX.Y/site-packages/easybuild/tools/toolchain/toolchain.py`:
     
     ```python
-    #                                   vvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+    def prepare(self...
+    ...
+    #                                    vvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
             if self.is_system_toolchain() or self.name == 'apptainer':
 
                 # define minimal build environment when using system toolchain;
