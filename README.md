@@ -57,7 +57,7 @@ Copy `rivanna_hook.py` from this repo to `/home/uvacse/ebhook`.
 
 ## Module naming scheme
 
-Use existing `rivanna-hmns.py` in this repo. If the syntax has changed, start from `lib/pythonX.Y/site-packages/easybuild/tools/module_naming_scheme/hierarchical_mns.py`:
+Copy `rivanna-hmns.py` from this repo to `lib/pythonX.Y/site-packages/easybuild/tools/module_naming_scheme`. If the syntax has changed, start from `hierarchical_mns.py`:
 
 - Change value of `CORE`/`COMPILER`/`MPI`/`TOOLCHAIN` to lowercase
 - `TOOLCHAIN = toolchains`
@@ -89,7 +89,7 @@ if tc_comps is None:
     if ec.toolchain.is_system_toolchain() or ec.toolchain.name == 'apptainer':
     ```
 
-1. In `lib/pythonX.Y/site-packages/easybuild/tools/module_naming_scheme/rivanna_hmns.py`:
+1. (Skip if copying `rivanna_hmns.py` from this repo.) In `lib/pythonX.Y/site-packages/easybuild/tools/module_naming_scheme/rivanna_hmns.py`:
     
     ```python
     CONTAINER = 'container'
