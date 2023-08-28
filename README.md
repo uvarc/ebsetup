@@ -122,3 +122,7 @@ if tc_comps is None:
     ```
 
 1. Copy `apptainerimage.py` from this repo to `lib/pythonX.Y/site-packages/easybuild/easyblocks/a`. (If syntax has changed, compare with `lib/pythonX.Y/site-packages/easybuild/easyblocks/generic/binary.py`.)
+
+## Custom Easyblocks
+
+Copy `mamba.py` to `lib/pythonX.Y/site-packages/easybuild/easyblocks/generic`.
