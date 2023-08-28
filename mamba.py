@@ -92,6 +92,10 @@ class Mamba(Binary):
         cmd = "mamba clean -ya"
         run_cmd(cmd, log_all=True, simple=True)
 
+        # remove write permission
+        cmd = "chmod -R go-w %s" % self.installdir
+        run_cmd(cmd, log_all=True, simple=True)
+
     def make_module_extra(self):
         """Add the install directory to the PATH."""
         txt = super(Mamba, self).make_module_extra()
