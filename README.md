@@ -126,3 +126,7 @@ if tc_comps is None:
 ## Custom Easyblocks
 
 Copy `mamba.py` to `lib/pythonX.Y/site-packages/easybuild/easyblocks/generic`.
+
+# Citation
+
+R. Sun and K. Siller, [HPC Container Management at the University of Virginia](https://doi.org/10.1145/3626203.3670568), PEARC '24: Practice and Experience in Advanced Research Computing 2024: Human Powered Computing 73, 1 (2024).
