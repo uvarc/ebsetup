@@ -36,9 +36,9 @@ setenv("EASYBUILD_MODULE_NAMING_SCHEME", "SSZ_HMNS")
 -- add custom module classes
 setenv("EASYBUILD_MODULECLASSES", "licensed,apptainer,containersystem")
 
--- set compiler optimization for  intel, gcc, and pgi compilers
+-- set compiler optimization for intel, gcc, and nvhpc compilers
 setenv("EASYBUILD_DEFAULT_OPT_LEVEL", "opt")
-setenv("EASYBUILD_OPTARCH", "intel:xavx -axCORE-AVX2,CORE-AVX512;gcc:march=sandybridge")
+setenv("EASYBUILD_OPTARCH", "intel:march=skylake;gcc:march=skylake;nvhpc:tp=zen2")
 
 -- define hidden modules/dependencies
 setenv("EASYBUILD_HIDE_DEPS", "automake,autoconf,binutils,bison,cairo-core,clibs,expat,flex,freetype-core,gcccore,glib,help2man,icc,ifort,iccifort,imkl,iompi,libassuan,libgcrypt,ibffi,libgtextutils,libiconv,libjpeg-turbo,libksba,libgpg-error,libpng,libreadline,libtiff,libtool,libxc,libxml2,m4,ncurses,netcdf-c,netcdf-cxx,netcdf-fortran,npth,pixman,pcre,protobuf,protobuf-python3,szip,tensorflowpkg3,x264,xz,zlib,X11")
