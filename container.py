@@ -1,7 +1,7 @@
-from easybuild.toolchains.compiler.dummycompiler import DummyCompiler
+from easybuild.toolchains.compiler.systemcompiler import SystemCompiler
 
 CONTAINER_FAMILY = 'CONTAINER'
 
-class Container(DummyCompiler):
+class Container(SystemCompiler):
     """Dummy toolchain."""
     TOOLCHAIN_FAMILY = CONTAINER_FAMILY

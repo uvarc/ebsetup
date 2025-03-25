@@ -79,7 +79,7 @@ COMP_NAME_VERSION_TEMPLATES = {
 CRAY_TOOLCHAIN_NAME_PREFIXES = ('Cray', 'cpe')
 
 
-class RivannaHMNS(ModuleNamingScheme):
+class SSZ_HMNS(ModuleNamingScheme):
     """Class implementing an example hierarchical module naming scheme."""
 
     REQUIRED_KEYS = ['name', 'versionprefix', 'version', 'versionsuffix', 'toolchain', 'moduleclass']

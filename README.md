@@ -31,7 +31,7 @@ setenv("EASYBUILD_MODULE_SYNTAX", "Lua")
 setenv("CONTAINERDIR", "/share/resources/containers/apptainer")
 
 -- use custom module naming scheme
-setenv("EASYBUILD_MODULE_NAMING_SCHEME", "RivannaHMNS")
+setenv("EASYBUILD_MODULE_NAMING_SCHEME", "SSZ_HMNS")
 
 -- add custom module classes
 setenv("EASYBUILD_MODULECLASSES", "licensed,apptainer,containersystem")
@@ -57,11 +57,11 @@ Copy `rivanna_hook.py` from this repo to `/home/uvacse/ebhook`.
 
 ## Module naming scheme
 
-Copy `rivanna-hmns.py` from this repo to `lib/pythonX.Y/site-packages/easybuild/tools/module_naming_scheme`. If the syntax has changed, start from `hierarchical_mns.py`:
+Copy `ssz_hmns.py` from this repo to `lib/pythonX.Y/site-packages/easybuild/tools/module_naming_scheme`. If the syntax has changed, start from `hierarchical_mns.py`:
 
 - Change value of `CORE`/`COMPILER`/`MPI`/`TOOLCHAIN` to lowercase
 - `TOOLCHAIN = toolchains`
-- `class RivannaHMNS`
+- `class SSZ_HMNS`
 - `det_short_module_name`: (Pseudocode) `return ec['name'].lower() if not 'R'`
 - `det_module_subdir`: `return subdir.lower()`
 
@@ -89,7 +89,7 @@ if tc_comps is None:
     if ec.toolchain.is_system_toolchain() or ec.toolchain.name == 'apptainer':
     ```
 
-1. (Skip if copying `rivanna_hmns.py` from this repo.) In `lib/pythonX.Y/site-packages/easybuild/tools/module_naming_scheme/rivanna_hmns.py`:
+1. (Skip if copying `ssz_hmns.py` from this repo.) In `lib/pythonX.Y/site-packages/easybuild/tools/module_naming_scheme/ssz_hmns.py`:
     
     ```python
     CONTAINER = 'container'
@@ -103,7 +103,7 @@ if tc_comps is None:
                     subdir = os.path.join(CONTAINER, ec.toolchain.name, ec.toolchain.version)
     ```
 
-1. Copy `container.py` from this repo to `lib/pythonX.Y/site-packages/easybuild/tools/toolchain`. (If syntax has changed, start from `toolchains/compiler/dummy.py`.)
+1. Copy `container.py` from this repo to `lib/pythonX.Y/site-packages/easybuild/tools/toolchain`. (If syntax has changed, start from `toolchains/compiler/systemcompiler.py`.)
 
 1. Copy `apptainer.py` from this repo to `lib/pythonX.Y/site-packages/easybuild/toolchains`.
 
@@ -125,7 +125,7 @@ if tc_comps is None:
 
 ## Custom Easyblocks
 
-Copy `mamba.py` to `lib/pythonX.Y/site-packages/easybuild/easyblocks/generic`.
+(Optional) In `lib/pythonX.Y/site-packages/easybuild/easyblocks/generic/conda.py` add `or get_software_root('miniforge')` for the `conda_cmd = 'mamba'` case.
 
 # Citation
 
