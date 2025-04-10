@@ -7,48 +7,33 @@ ml easybuild
 eb --install-latest-eb-release --prefix /apps/software/EasyBuild/x.y.z
 ```
 
-### Edit modulefile
+### Configuration
 
 Move `/apps/standard/core/EasyBuild/x.y.z.lua` to `/apps/modulefiles/easybuild`. Append:
-
 ```lua
--- CUSTOM FOR DEVEL
-local appspath = '/apps'
-local arch = 'standard'
-prepend_path("PYTHONPATH", pathJoin(appspath,"ebscripts/easybuild/easyblocks"))
-
-local user = os.getenv("USER")
-setenv("EASYBUILD_BUILDPATH", pathJoin("/tmp",user))
-setenv("EASYBUILD_INSTALLPATH", appspath)
-setenv("EASYBUILD_SUBDIR_SOFTWARE", pathJoin("software", arch))
-setenv("EASYBUILD_SUBDIR_MODULES", pathJoin("modulefiles", arch))
-setenv("EASYBUILD_SUFFIX_MODULES_PATH", "")
-setenv("EASYBUILD_MODULES_TOOL", "Lmod")
-setenv("EASYBUILD_REPOSITORYPATH", pathJoin(appspath,"ebscripts/easybuild/easyconfigs"))
-setenv("EASYBUILD_ROBOT_PATHS", pathJoin(appspath, "ebscripts/easybuild/easyconfigs"))
-setenv("EASYBUILD_SOURCEPATH", "/share/resources/apps/source")
-setenv("EASYBUILD_MODULE_SYNTAX", "Lua")
 setenv("CONTAINERDIR", "/share/resources/containers/apptainer")
+```
 
--- use custom module naming scheme
-setenv("EASYBUILD_MODULE_NAMING_SCHEME", "SSZ_HMNS")
-
--- add custom module classes
-setenv("EASYBUILD_MODULECLASSES", "licensed,apptainer,containersystem")
-
--- set compiler optimization for intel, gcc, and nvhpc compilers
-setenv("EASYBUILD_DEFAULT_OPT_LEVEL", "opt")
-setenv("EASYBUILD_OPTARCH", "intel:march=skylake;gcc:march=skylake;nvhpc:tp=zen2")
-
--- define hidden modules/dependencies
-setenv("EASYBUILD_HIDE_DEPS", "automake,autoconf,binutils,bison,cairo-core,clibs,expat,flex,freetype-core,gcccore,glib,help2man,icc,ifort,iccifort,imkl,iompi,libassuan,libgcrypt,ibffi,libgtextutils,libiconv,libjpeg-turbo,libksba,libgpg-error,libpng,libreadline,libtiff,libtool,libxc,libxml2,m4,ncurses,netcdf-c,netcdf-cxx,netcdf-fortran,npth,pixman,pcre,protobuf,protobuf-python3,szip,tensorflowpkg3,x264,xz,zlib,X11")
-setenv("EASYBUILD_HIDE_TOOLCHAINS", "gcccore,iompi")
-
--- default behavior in 4.x installs all modules as /apps/software/standard/MODULE/VERSION-[TOOLCHAIN-VERSION]
-setenv("EASYBUILD_DISABLE_FIXED_INSTALLDIR_NAMING_SCHEME", "")
-
--- hooks
-setenv("EASYBUILD_HOOKS", "/home/uvacse/ebhook/rivanna_hook.py")
+Create `~/.config/easybuild` if it does not already exist and copy `config.cfg`. A blank file can be generated via
+```bash
+eb --confighelp > $HOME/.config/easybuild/config.cfg
+```
+To see just the uncommented lines of the config file:
+```bash
+$ grep ^[^#].*= ~/.config/easybuild/config.cfg
+repositorypath=/apps/ebscripts/easybuild/easyconfigs
+robot-paths=%(repositorypath)s:%(DEFAULT_ROBOT_PATHS)s
+buildpath=/tmp/uvacse
+hooks=/home/uvacse/ebhook/rivanna_hook.py
+installpath=/apps
+module-naming-scheme=SSZ_HMNS
+sourcepath=/share/resources/apps/source
+subdir-modules=modulefiles/standard
+subdir-software=software/standard
+suffix-modules-path=
+default-opt-level=opt
+fixed-installdir-naming-scheme=False
+optarch=intel:march=skylake;gcc:march=skylake;nvhpc:tp=zen2
 ```
 
 ## Hook
