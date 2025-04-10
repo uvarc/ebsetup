@@ -97,7 +97,7 @@ class EB_ApptainerImage(Binary):
                 if os.path.exists(self.installdir):
                     remove_dir(self.installdir)
                 shutil.copytree(staged_installdir, self.installdir)
-            except OSError, err:
+            except OSError as err:
                 raise EasyBuildError("Failed to move staged install from %s to %s: %s",
                                      staged_installdir, self.installdir, err)
 
@@ -113,7 +113,7 @@ class EB_ApptainerImage(Binary):
             try:
                 os.makedirs(easybuilddir)
                 shutil.copy(os.path.join(self.cfg['start_dir'], deffile), easybuilddir)
-            except OSError, err:
+            except OSError as err:
                 raise EasyBuildError("Failed to copy %s to %s: %s", self.cfg['deffile'], easybuilddir, err)
 
         super(Binary, self).post_install_step()
