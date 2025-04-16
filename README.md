@@ -20,9 +20,12 @@ eb --confighelp > $HOME/.config/easybuild/config.cfg
 ```
 To see just the uncommented lines of the config file:
 ```bash
-$ grep ^[^#].*= ~/.config/easybuild/config.cfg
+$ grep ^[^#] ~/.config/easybuild/config.cfg 
+[MAIN]
+[basic]
 repositorypath=/apps/ebscripts/easybuild/easyconfigs
 robot-paths=%(repositorypath)s:%(DEFAULT_ROBOT_PATHS)s
+[config]
 buildpath=/tmp/uvacse
 hooks=/home/uvacse/ebhook/rivanna_hook.py
 installpath=/apps
@@ -31,9 +34,19 @@ sourcepath=/share/resources/apps/source
 subdir-modules=modulefiles/standard
 subdir-software=software/standard
 suffix-modules-path=
+[container]
+[easyconfig]
+[github]
+[informative]
+[job]
+[override]
 default-opt-level=opt
 fixed-installdir-naming-scheme=False
-optarch=intel:march=skylake;gcc:march=skylake;nvhpc:tp=zen2
+optarch=intel:-march=skylake;GCC:-march=skylake;NVHPC:-tp=px
+[package]
+[regtest]
+[software]
+[unittest]
 ```
 
 ## Hook
