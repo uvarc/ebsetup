@@ -4,12 +4,12 @@
 
 ```bash
 ml easybuild
-eb --install-latest-eb-release --prefix /apps/software/EasyBuild/x.y.z
+eb --install-latest-eb-release
 ```
 
 ### Configuration
 
-Move `/apps/standard/core/EasyBuild/x.y.z.lua` to `/apps/modulefiles/easybuild`. Append:
+In `/apps/standard/core/EasyBuild/x.y.z.lua` append:
 ```lua
 setenv("CONTAINERDIR", "/share/resources/containers/apptainer")
 ```
