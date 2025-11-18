@@ -27,7 +27,7 @@ repositorypath=/apps/ebscripts/easybuild/easyconfigs
 robot-paths=%(repositorypath)s:%(DEFAULT_ROBOT_PATHS)s
 [config]
 buildpath=/tmp/uvacse
-hooks=/home/uvacse/ebhook/rivanna_hook.py
+hooks=/home/uvacse/ebhook/ssz_hook.py
 installpath=/apps
 module-naming-scheme=SSZ_HMNS
 sourcepath=/share/resources/apps/source
@@ -51,7 +51,7 @@ optarch=intel:-march=skylake;GCC:-march=skylake;NVHPC:-tp=px
 
 ## Hook
 
-Copy `rivanna_hook.py` from this repo to `/home/uvacse/ebhook`.
+Copy `ssz_hook.py` from this repo to `/home/uvacse/ebhook`.
 
 ## Module naming scheme
 
