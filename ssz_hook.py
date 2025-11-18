@@ -3,10 +3,10 @@ def post_install_hook(self):
     from glob import glob
     import os
     import shutil
-    files_to_copy = (glob(self.cfg['start_dir'] + '/' + 'COPYRIGHT*') +
-                     glob(self.cfg['start_dir'] + '/' + 'LICENSE*') +
-                     glob(self.cfg['start_dir'] + '/' + 'LICENCE*') +
-                     glob(self.cfg['start_dir'] + '/' + 'README*')
+    files_to_copy = (glob(self.cfg['start_dir'] + 'COPYRIGHT*') +
+                     glob(self.cfg['start_dir'] + 'LICENSE*') +
+                     glob(self.cfg['start_dir'] + 'LICENCE*') +
+                     glob(self.cfg['start_dir'] + 'README*')
                     )
     for i in files_to_copy:
         if os.path.isfile(i):
