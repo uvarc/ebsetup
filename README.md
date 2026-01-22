@@ -9,7 +9,7 @@ eb --install-latest-eb-release
 
 ### Configuration
 
-In `/apps/standard/core/EasyBuild/x.y.z.lua` append:
+In `/apps/modulefiles/standard/core/EasyBuild/x.y.z.lua` append:
 ```lua
 setenv("CONTAINERDIR", "/share/resources/containers/apptainer")
 ```
@@ -123,7 +123,10 @@ if tc_comps is None:
 
 ## Custom Easyblocks
 
-(Optional) In `lib/pythonX.Y/site-packages/easybuild/easyblocks/generic/conda.py` add `or get_software_root('miniforge')` for the `conda_cmd = 'mamba'` case.
+First `cd lib/pythonX.Y/site-packages/easybuild/easyblocks`
+
+- In `l/llvm.py` around line 900 `gcc_version = get_software_version('GCCcore')`, delete `core`.
+- (Optional) In `generic/conda.py` add `or get_software_root('miniforge')` for the `conda_cmd = 'mamba'` case.
 
 # Citation
 
