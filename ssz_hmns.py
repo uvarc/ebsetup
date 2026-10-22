@@ -40,10 +40,10 @@ from easybuild.tools.module_naming_scheme.mns import ModuleNamingScheme
 from easybuild.tools.module_naming_scheme.toolchain import det_toolchain_compilers, det_toolchain_mpi
 
 
-CORE = 'core'
-COMPILER = 'compiler'
-MPI = 'mpi'
-TOOLCHAIN = 'toolchains'
+CORE = 'Core'
+COMPILER = 'Compiler'
+MPI = 'MPI'
+TOOLCHAIN = 'Toolchains'
 
 MODULECLASS_COMPILER = 'compiler'
 MODULECLASS_MPI = 'mpi'
@@ -107,9 +107,10 @@ class SSZ_HMNS(ModuleNamingScheme):
         Determine short module name, i.e. the name under which modules will be exposed to users.
         Examples: GCC/4.8.3, OpenMPI/1.6.5, OpenBLAS/0.2.9, HPL/2.1, Python/2.7.5
         """
-        if ec['name'] != 'R':
-            ec['name'] = ec['name'].lower()
-        return os.path.join(ec['name'], self.det_full_version(ec))
+        name = ec['name']
+        if name != 'R':
+            name = name.lower()
+        return os.path.join(name, self.det_full_version(ec))
 
     def det_full_version(self, ec):
         """Determine full version, taking into account version prefix/suffix."""
@@ -157,13 +158,13 @@ class SSZ_HMNS(ModuleNamingScheme):
         tc_comps = det_toolchain_compilers(ec)
         # determine prefix based on type of toolchain used
         if tc_comps is None:
-            # no compiler in toolchain, system toolchain => Core module
             self.log.debug('ec.toolchain.TOOLCHAIN_FAMILY=%s', ec.toolchain.TOOLCHAIN_FAMILY)
             if ec['moduleclass'] == 'toolchain':
                 subdir = TOOLCHAIN
             elif ec.toolchain.TOOLCHAIN_FAMILY == 'CONTAINER':
                 subdir = os.path.join(CONTAINER, ec.toolchain.name, ec.toolchain.version)
             else:
+                # no compiler in toolchain, system toolchain => Core module
                 subdir = CORE
         elif tc_comps == [None]:
             # no info on toolchain compiler (cfr. Cray toolchains),
@@ -259,7 +260,7 @@ class SSZ_HMNS(ModuleNamingScheme):
         elif modclass == MODULECLASS_TOOLCHAIN and tc_comp_info is None:
             # special case for Cray toolchains
             if any(ec.name.startswith(x) for x in CRAY_TOOLCHAIN_NAME_PREFIXES):
-                paths.append(os.path.join(TOOLCHAIN, ec.name, ec.version))
+                paths.append(os.path.join(TOOLCHAIN, ec.name.lower(), ec.version))
             # special case for NVHPC toolchains that lack standalone MPI component
             elif ec.name == "NVHPC" and "GCCcore" not in {dep['name'] for dep in ec['dependencies']}:
                 fullver = self.det_full_version(ec)

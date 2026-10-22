@@ -76,29 +76,30 @@ Copy `ssz_hook.py` from this repo to `/home/uvacse/ebhook`.
 
 Copy `ssz_hmns.py` from this repo to `lib/pythonX.Y/site-packages/easybuild/tools/module_naming_scheme`. If the syntax has changed, start from `hierarchical_mns.py`:
 
-- Change value of `CORE`/`COMPILER`/`MPI`/`TOOLCHAIN` to lowercase
-- `TOOLCHAIN = toolchains`
+- `TOOLCHAIN = toolchains` (delete this step in the next fresh installation of the entire software stack)
 - `class SSZ_HMNS`
 - `det_short_module_name`:
 
     ```
-    if ec['name'] != 'R':
-        ec['name'] = ec['name'].lower()
+    name = ec['name']
+        if name != 'R':
+            name = name.lower()
+        return os.path.join(name, self.det_full_version(ec))
     ```
 
 - `det_module_subdir`: `return subdir.lower()`
 
-- `det_modpath_extensions`: Add `.lower()` to all names
+- Install toolchains to its own subdir instead of core (delete this step in the next fresh installation of the entire software stack)
 
-```
-if tc_comps is None:
-    # no compiler in toolchain, system toolchain => Core module
-    self.log.debug('ec.toolchain.TOOLCHAIN_FAMILY=%s', ec.toolchain.TOOLCHAIN_FAMILY)
-    if ec['moduleclass'] == 'toolchain':
-        subdir = TOOLCHAIN
-    else:
-        subdir = CORE
-```
+    ```
+    if tc_comps is None:
+        self.log.debug('ec.toolchain.TOOLCHAIN_FAMILY=%s', ec.toolchain.TOOLCHAIN_FAMILY)
+        if ec['moduleclass'] == 'toolchain':
+            subdir = TOOLCHAIN
+        else:
+            # no compiler in toolchain, system toolchain => Core module
+            subdir = CORE
+    ```
 
 - Add `is_short_modname_for` from `mns.py`. Add `.lower()` to `name` and `short_modname`.
 
