@@ -64,10 +64,18 @@ Copy `ssz_hmns.py` from this repo to `lib/pythonX.Y/site-packages/easybuild/tool
 - Change value of `CORE`/`COMPILER`/`MPI`/`TOOLCHAIN` to lowercase
 - `TOOLCHAIN = toolchains`
 - `class SSZ_HMNS`
-- `det_short_module_name`: (Pseudocode) `return ec['name'].lower() if not 'R'`
+- `det_short_module_name`:
+
+    ```
+    if ec['name'] != 'R':
+        ec['name'] = ec['name'].lower()
+    ```
+
 - `det_module_subdir`: `return subdir.lower()`
 
-```python
+- `det_modpath_extensions`: Add `.lower()` to all names
+
+```
 if tc_comps is None:
     # no compiler in toolchain, system toolchain => Core module
     self.log.debug('ec.toolchain.TOOLCHAIN_FAMILY=%s', ec.toolchain.TOOLCHAIN_FAMILY)
@@ -77,8 +85,6 @@ if tc_comps is None:
         subdir = CORE
 ```
 
-- `det_modpath_extensions`: Add `.lower()` to all names; `excluded_comps = ['GCC', 'NVHPC', 'intel']`
-
 - Add `is_short_modname_for` from `mns.py`. Add `.lower()` to `name` and `short_modname`.
 
 ## Container toolchain
@@ -86,8 +92,6 @@ if tc_comps is None:
 1. In `lib/pythonX.Y/site-packages/easybuild/tools/module_naming_scheme/toolchain.py`:
 
     ```python
-    from easybuild.tools.toolchain.container import CONTAINER_FAMILY
-    ...
     if ec.toolchain.is_system_toolchain() or ec.toolchain.name == 'apptainer':
     ```
 
@@ -109,18 +113,11 @@ if tc_comps is None:
 
 1. Copy `apptainer.py` from this repo to `lib/pythonX.Y/site-packages/easybuild/toolchains`.
 
-1. In `lib/pythonX.Y/site-packages/easybuild/tools/toolchain/toolchain.py`:
+1. In `lib/pythonX.Y/site-packages/easybuild/tools/toolchain/toolchain.py` under `def prepare()`:
     
     ```python
-    def prepare(self...
-    ...
-    #                                    vvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+                                         vvvvvvvvvvvvvvvvvvvvvvvvvvvv
             if self.is_system_toolchain() or self.name == 'apptainer':
-
-                # define minimal build environment when using system toolchain;
-                # this is mostly done to try controlling which compiler commands are being used,
-                # cfr. https://github.com/easybuilders/easybuild-framework/issues/3398
-                self.set_minimal_build_env()
     ```
 
 1. Copy `apptainerimage.py` from this repo to `lib/pythonX.Y/site-packages/easybuild/easyblocks/a`. (If syntax has changed, compare with `lib/pythonX.Y/site-packages/easybuild/easyblocks/generic/binary.py`.)

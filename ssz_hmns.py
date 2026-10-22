@@ -1,5 +1,5 @@
 ##
-# Copyright 2013-2021 Ghent University
+# Copyright 2013-2026 Ghent University
 #
 # This file is part of EasyBuild,
 # originally created by the HPC team of Ghent University (http://ugent.be/hpc/en),
@@ -25,8 +25,10 @@
 """
 Implementation of an example hierarchical module naming scheme.
 
-:author: Kenneth Hoste (Ghent University)
-:author: Markus Geimer (Forschungszentrum Juelich GmbH)
+Authors:
+
+* Kenneth Hoste (Ghent University)
+* Markus Geimer (Forschungszentrum Juelich GmbH)
 """
 
 import os
@@ -37,19 +39,21 @@ from easybuild.tools.build_log import EasyBuildError
 from easybuild.tools.module_naming_scheme.mns import ModuleNamingScheme
 from easybuild.tools.module_naming_scheme.toolchain import det_toolchain_compilers, det_toolchain_mpi
 
+
 CORE = 'core'
 COMPILER = 'compiler'
 MPI = 'mpi'
 TOOLCHAIN = 'toolchains'
-CONTAINER = 'container'
-CONTAINER_TOOLCHAINS = ['apptainer']
 
 MODULECLASS_COMPILER = 'compiler'
 MODULECLASS_MPI = 'mpi'
 MODULECLASS_TOOLCHAIN = 'toolchain'
-MODULECLASS_CONTAINER = 'containersystem'
 
 GCCCORE = GCCcore.NAME
+
+CONTAINER = 'container'
+CONTAINER_TOOLCHAINS = ['apptainer']
+MODULECLASS_CONTAINER = 'containersystem'
 
 # note: names in keys are ordered alphabetically
 COMP_NAME_VERSION_TEMPLATES = {
@@ -103,11 +107,9 @@ class SSZ_HMNS(ModuleNamingScheme):
         Determine short module name, i.e. the name under which modules will be exposed to users.
         Examples: GCC/4.8.3, OpenMPI/1.6.5, OpenBLAS/0.2.9, HPL/2.1, Python/2.7.5
         """
-        if ec['name'] == 'R':
-            name = ec['name']
-        else:
-            name = ec['name'].lower()
-        return os.path.join(name, self.det_full_version(ec))
+        if ec['name'] != 'R':
+            ec['name'] = ec['name'].lower()
+        return os.path.join(ec['name'], self.det_full_version(ec))
 
     def det_full_version(self, ec):
         """Determine full version, taking into account version prefix/suffix."""
@@ -124,7 +126,7 @@ class SSZ_HMNS(ModuleNamingScheme):
             res = None
         else:
             if len(tc_comps) > 0 and tc_comps[0]:
-                comp_versions = dict([(comp['name'], self.det_full_version(comp)) for comp in tc_comps])
+                comp_versions = {comp['name']: self.det_full_version(comp) for comp in tc_comps}
                 comp_names = comp_versions.keys()
                 key = ','.join(sorted(comp_names))
                 if key in COMP_NAME_VERSION_TEMPLATES:
@@ -208,16 +210,16 @@ class SSZ_HMNS(ModuleNamingScheme):
             # obtain list of compilers based on that extend $MODULEPATH in some way other than <name>/<version>
             extend_comps = []
             # exclude GCC for which <name>/<version> is used as $MODULEPATH extension
-            excluded_comps = ['GCC', 'NVHPC', 'intel']
+            excluded_comps = ['GCC']
             for comps in COMP_NAME_VERSION_TEMPLATES.keys():
                 extend_comps.extend([comp for comp in comps.split(',') if comp not in excluded_comps])
 
             comp_name_ver = None
             if ec['name'] in extend_comps:
-                for key in COMP_NAME_VERSION_TEMPLATES:
+                for key, comp_tmpl in COMP_NAME_VERSION_TEMPLATES.items():
                     comp_names = key.split(',')
                     if ec['name'] in comp_names:
-                        comp_name, comp_ver_tmpl = COMP_NAME_VERSION_TEMPLATES[key]
+                        comp_name, comp_ver_tmpl = comp_tmpl
                         comp_versions = {ec['name']: self.det_full_version(ec)}
                         if ec['name'] == 'ifort':
                             # 'icc' key should be provided since it's the only one used in the template
@@ -250,15 +252,18 @@ class SSZ_HMNS(ModuleNamingScheme):
                 raise EasyBuildError("No compiler available in toolchain %s used to install MPI library %s v%s, "
                                      "which is required by the active module naming scheme.",
                                      ec['toolchain'], ec['name'], ec['version'])
-            else:
-                tc_comp_name, tc_comp_ver = tc_comp_info
-                fullver = self.det_full_version(ec)
-                paths.append(os.path.join(MPI, tc_comp_name.lower(), tc_comp_ver, ec['name'].lower(), fullver))
+            tc_comp_name, tc_comp_ver = tc_comp_info
+            fullver = self.det_full_version(ec)
+            paths.append(os.path.join(MPI, tc_comp_name.lower(), tc_comp_ver, ec['name'].lower(), fullver))
 
-        # special case for Cray toolchains
         elif modclass == MODULECLASS_TOOLCHAIN and tc_comp_info is None:
+            # special case for Cray toolchains
             if any(ec.name.startswith(x) for x in CRAY_TOOLCHAIN_NAME_PREFIXES):
-                paths.append(os.path.join(TOOLCHAIN, ec.name.lower(), ec.version))
+                paths.append(os.path.join(TOOLCHAIN, ec.name, ec.version))
+            # special case for NVHPC toolchains that lack standalone MPI component
+            elif ec.name == "NVHPC" and "GCCcore" not in {dep['name'] for dep in ec['dependencies']}:
+                fullver = self.det_full_version(ec)
+                paths.append(os.path.join(MPI, "nvidia-compilers", fullver, ec.name.lower(), fullver))
 
         return paths
 
