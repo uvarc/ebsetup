@@ -101,6 +101,18 @@ Copy `ssz_hmns.py` from this repo to `lib/pythonX.Y/site-packages/easybuild/tool
             subdir = CORE
     ```
 
+- `det_modpath_extensions`: add `.lower()` to names
+
+    ```
+    comp_name_ver = [ec['name'].lower(), self.det_full_version(ec)]
+    ...
+    paths.append(os.path.join(MPI, tc_comp_name.lower(), tc_comp_ver, ec['name'].lower(), fullver))
+    ...
+    paths.append(os.path.join(TOOLCHAIN, ec.name.lower(), ec.version))
+    ...
+    paths.append(os.path.join(MPI, "nvidia-compilers", fullver, ec.name.lower(), fullver))
+    ```
+
 - Add `is_short_modname_for` from `mns.py`. Add `.lower()` to `name` and `short_modname`.
 
 ## Container toolchain
