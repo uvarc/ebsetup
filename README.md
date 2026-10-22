@@ -2,14 +2,29 @@
 
 ## Install new version
 
+Due to missing `bdist_wheel` in the system python, first create a venv:
+
 ```bash
+cd
+ml uv
+uv venv --seed --python 3.12
+source .venv/bin/activate
+uv pip install pip setuptools wheel rich
+```
+
+Set `EB_PYTHON=$HOME/.venv/bin/python` and run:
+
+```bash
+module purge
 ml easybuild
 eb --install-latest-eb-release
 ```
 
+If you get an error related to the ssl certificate, prepend the command with `SSL_CERT_FILE=/etc/ssl/certs/ca-bundle.crt`.
+
 ### Configuration
 
-In `/apps/modulefiles/standard/core/EasyBuild/x.y.z.lua` append:
+In `/apps/modulefiles/standard/core/easybuild/x.y.z.lua` append:
 ```lua
 setenv("CONTAINERDIR", "/share/resources/containers/apptainer")
 ```
