@@ -58,7 +58,6 @@ suffix-modules-path=
 accept-eula-for=intel-compilers,imkl,impi,NVHPC,nvidia-compilers,CUDA
 cuda-compute-capabilities=8.0,8.6,8.9,10.0,12.0
 default-opt-level=opt
-filter-deps=Autoconf,Automake,libtool,Autotools,flex,M4
 fixed-installdir-naming-scheme=False
 optarch=Intel:-march=skylake;GCC:-march=skylake;NVHPC:-tp=znver2
 rpath=0
